@@ -5,3 +5,4 @@
 ^\.github$
 ^inst/design$
 ^osgeo0\.Rproj$
+^CODE_OF_CONDUCT\.md$
