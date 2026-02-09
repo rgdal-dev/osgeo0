@@ -1,0 +1,33 @@
+Package: osgeo0
+Title: R Interface to the GDAL Geographic Network Model (osgeo.gnm)
+Version: 0.0.0.9000
+Authors@R: 
+    person("Michael", "Sumner", , "mdsumner@gmail.com", role = c("aut", "cre"))
+Description: Idiomatic R bindings for the GDAL Geographic Network Model 
+    (GNM) via the Python osgeo.gnm module and reticulate. Create, manage, 
+    and analyse geographic networks (water pipes, roads, electrical grids) 
+    with topology building, shortest-path analysis, and connected component 
+    detection. Uses wk for geometry interchange and S7 for the class system. 
+    Designed as a template for broader osgeo.* wrapping in R.
+License: MIT + file LICENSE
+URL: https://github.com/mdsumner/osgeo0
+BugReports: https://github.com/mdsumner/osgeo0/issues
+Imports:
+    cli,
+    reticulate,
+    S7,
+    wk
+Suggests:
+    gdalraster,
+    testthat (>= 3.0.0),
+    withr
+Config/testthat/edition: 3
+Config/reticulate:
+  list(
+    packages = list(
+      list(package = "gdal", pip = FALSE, channel = "conda-forge")
+    )
+  )
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
