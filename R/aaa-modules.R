@@ -8,4 +8,6 @@
   .osgeo$gdal <- reticulate::import("osgeo.gdal", delay_load = TRUE)
   .osgeo$ogr  <- reticulate::import("osgeo.ogr",  delay_load = TRUE)
   .osgeo$osr  <- reticulate::import("osgeo.osr",  delay_load = TRUE)
+  # Silence the GDAL 4.0 deprecation warning
+  try(.osgeo$gdal$UseExceptions(), silent = TRUE)
 }

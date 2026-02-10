@@ -56,26 +56,7 @@ library(osgeo0)
 net <- gnm_create(tempdir(), "water_network", srs = "EPSG:4326")
 net
 
-# Import layers from shapefiles
-gnm_import_path(net, "wells.shp", name = "wells")
-gnm_import_path(net, "pipes.shp", name = "pipes")
 
-# Build topology automatically
-gnm_connect_auto(net, tolerance = 0.000001)
-
-# Find shortest path
-wells <- gnm_layer(net, "wells")
-path <- gnm_shortest_path(net, wells$.gfid[1], wells$.gfid[4])
-print(path)
-
-# Path result is a data.frame with wk geometry — works with wk_plot, geos, etc.
-wk::wk_plot(path)
-
-# Block a feature (simulate a broken pipe)
-gnm_block(net, wells$.gfid[2])
-
-# Clean up
-gnm_close(net)
 ```
 
 ## Design

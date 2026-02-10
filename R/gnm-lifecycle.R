@@ -15,7 +15,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' net <- gnm_create(tempfile(), "my_network", srs = "EPSG:4326")
+#' net <- gnm_create(tempdir(), "my_network", srs = "EPSG:4326")
 #' gnm_close(net)
 #' }
 gnm_create <- function(path, name, srs = "EPSG:4326",
@@ -23,6 +23,9 @@ gnm_create <- function(path, name, srs = "EPSG:4326",
   .assert_gnm_available()
 
   path <- normalizePath(path, mustWork = FALSE)
+  if (!dir.exists(path)) {
+    dir.create(path, recursive = TRUE)
+  }
   gdal <- .osgeo$gdal
 
   drv <- gdal$GetDriverByName("GNMFile")
@@ -44,6 +47,7 @@ gnm_create <- function(path, name, srs = "EPSG:4326",
       ))
     }
   )
+  py_ds <- .osgeo$gnm$CastToGenericNetwork(py_ds)
 
   if (is.null(py_ds)) {
     cli::cli_abort("Failed to create GNM network at {.path {path}}.")
@@ -64,6 +68,8 @@ gnm_create <- function(path, name, srs = "EPSG:4326",
   .register_destructor(net)
   net
 }
+
+
 
 
 #' Open an existing GNM network
@@ -106,10 +112,23 @@ gnm_open <- function(path, update = TRUE) {
     cli::cli_abort("Failed to open GNM network at {.path {path}}.")
   }
 
+  py_ds <- .osgeo$gnm$CastToGenericNetwork(py_ds)
   # Extract metadata from the opened network
-  name <- tryCatch(py_ds$GetName(), error = function(e) basename(path))
-  description <- tryCatch(py_ds$GetDescription(), error = function(e) "")
+  # Get SRS from the network
+  srs_str <- tryCatch({
+    sr <- py_ds$GetSpatialRef()
+    if (!is.null(sr)) sr$ExportToWkt() else "EPSG:4326"
+  }, error = function(e) "EPSG:4326")
 
+  # With this:
+  meta <- .read_gnm_meta(path)
+  name <- meta[["net_name"]] %||% basename(path)
+  description <- meta[["net_description"]] %||% ""
+
+  srs_str <- tryCatch({
+    sr <- py_ds$GetSpatialRef()
+    if (!is.null(sr)) sr$ExportToWkt() else "EPSG:4326"
+  }, error = function(e) "EPSG:4326")
   # Get SRS from the network
   srs_str <- tryCatch({
     sr <- py_ds$GetSpatialRef()

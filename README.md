@@ -34,7 +34,7 @@ reticulate::use_python("/usr/bin/python3 ")
 library(osgeo0)
 
 # Create a network
-net <- gnm_create(tempfile(), "water_network", srs = "EPSG:4326")
+net <- gnm_create(tempdir(), "water_network", srs = "EPSG:4326")
 
 # Import layers from shapefiles
 gnm_import_path(net, "wells.shp", name = "wells")

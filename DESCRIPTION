@@ -1,6 +1,6 @@
 Package: osgeo0
 Title: R Interface to the GDAL Geographic Network Model (osgeo.gnm)
-Version: 0.0.0.9000
+Version: 0.0.1
 Authors@R: 
     person("Michael", "Sumner", , "mdsumner@gmail.com", role = c("aut", "cre"))
 Description: Idiomatic R bindings for the GDAL Geographic Network Model 
@@ -30,4 +30,4 @@ Config/reticulate:
   )
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3

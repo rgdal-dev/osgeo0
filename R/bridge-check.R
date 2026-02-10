@@ -108,3 +108,27 @@
   # Filter out system layers
   names[!grepl("^_gnm_", names)]
 }
+
+.read_gnm_meta <- function(path) {
+  ogr <- .osgeo$ogr
+  # Find the network subdirectory (contains _gnm_meta.dbf)
+  dirs <- list.dirs(path, recursive = FALSE, full.names = TRUE)
+  for (d in dirs) {
+    meta_path <- file.path(d, "_gnm_meta.dbf")
+    if (file.exists(meta_path)) {
+      ds <- tryCatch(ogr$Open(meta_path), error = function(e) NULL)
+      if (is.null(ds)) next
+      lyr <- ds$GetLayerByIndex(0L)
+      lyr$ResetReading()
+      meta <- list()
+      repeat {
+        feat <- lyr$GetNextFeature()
+        if (is.null(feat)) break
+        meta[[feat$GetField("key")]] <- feat$GetField("val")
+      }
+      ds <- NULL
+      return(meta)
+    }
+  }
+  list()
+}

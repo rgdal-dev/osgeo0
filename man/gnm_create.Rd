@@ -33,7 +33,7 @@ ready for importing layers and building topology.
 }
 \examples{
 \dontrun{
-net <- gnm_create(tempfile(), "my_network", srs = "EPSG:4326")
+net <- gnm_create(tempdir(), "my_network", srs = "EPSG:4326")
 gnm_close(net)
 }
 }

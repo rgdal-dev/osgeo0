@@ -148,5 +148,5 @@ gnm_components <- function(net) {
     features$.component_id <- 1L
   }
 
-  gnm_components(features = features)
+  gnm_components(features)
 }
